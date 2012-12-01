@@ -61,11 +61,13 @@ for updfile in updates.keys():
         functions.downloadToFile(url, localfile, key[0], key[1])
         print localfile, 'downloaded'
 
+os.unlink(dbpath + 'update_new.ver')
+
 verfile = open(dbpath + 'update.ver', 'wt') 
 for updfile in updates.keys():
     if updfile == 'HOSTS':
         continue
-    if 'language' in updates[updfile] and int(updates[updfile]['language'] in '1033,1049,1058'):
+    if 'language' in updates[updfile] and not updates[updfile]['language'] in '1033,1049,1058':
         continue
     verfile.write('[%s]\r\n' % updfile)
     for param in updates[updfile].keys():

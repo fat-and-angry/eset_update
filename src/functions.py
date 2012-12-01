@@ -38,7 +38,7 @@ def download(url, username='', password=''):
         opener = urllib2.build_opener(authhandler)
         urllib2.install_opener(opener)
     req = urllib2.Request(url)
-    req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:12.0) Gecko/20120403211507 Firefox/12.0')
+    req.add_header('User-Agent', 'ESS Update (Windows; U; 32bit; VDB 12606; BPC 4.2.40.10; OS: 5.1.2600 SP 3.0 NT; TDB 12606; CH 1.0; LNG 1049; x32c; UPD http://nod.malbi.dp.ua; APP eavbe; BEO 1; CPU 1356; ASP 0.10; FW 0.0; PX 0; PUA 1)')
     u = urllib2.urlopen(req)
     blockSize = 8192
     gbuffer = ''
