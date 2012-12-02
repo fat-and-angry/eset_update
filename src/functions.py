@@ -1,6 +1,7 @@
 import rarfile
 import urllib2
 import os
+import re
 
 from HTMLParser import HTMLParser
 

@@ -5,64 +5,75 @@ import update
 import tempfile
 import os
 import random
+import logging
+
+logging.basicConfig(
+    filename = 'esetupd.log',
+    format = "%(asctime)s [%(levelname)s]: %(message)s",
+    level = logging.INFO)
 
 dbpath = '../db/'
 dbprefix = 'updates'
 
+log = logging.getLogger()
+
+log.warning('Start working.')
+log.info('Loading keys.')
 key = keytools.loadKey()
 if not key or not keytools.checkKey(key[0], key[1]):
-    print('Searching new keys')
+    log.warning('Walid key not found. Start searching new key.')
     keys = keytools.findKeys()
-    print keys
     for k in keys.keys():
         if keytools.checkKey(k, keys[k]):
             key = [k, keys[k]]
             keytools.saveKey(k, keys[k])
+            log.info('New key found.')
             break
 if not key:
+    log.error('No walid key found. Terminating')
     raise Exception, 'Key not found'
 
-print('downloading')
+functions.mkpath(dbpath + dbprefix)
+
+log.info('Downloading VER file')
 url = 'http://update.eset.com/eset_upd/update.ver'
 tmpfhd, tmpfname = tempfile.mkstemp()
 functions.downloadToFile(url, tmpfname)
 
-print('unpack')
+log.debug('Unpacking VER file')
 functions.unrar(tmpfname, dbpath, 'update_new.ver')
-
 os.unlink(tmpfname)
 
 updfile = open(dbpath + 'update_new.ver')
 updates = update.parseUpdate(updfile.read())
 
 host = random.choice(updates['HOSTS']['Other'])
-print 'Selected host', host
+log.debug('Selected host %s', host )
 
-functions.mkpath(dbpath + dbprefix)
-
+log.info('Start update checking and downloading')
 for updfile in updates.keys():
     if not 'file' in updates[updfile]:
         continue
     if 'language' in updates[updfile] and not updates[updfile]['language'] in '1033,1049,1058':
         continue
+    needdownload = False
     localfile = dbpath + dbprefix + '/' + os.path.basename(updates[updfile]['file'])
     url = host + updates[updfile]['file']
     if os.path.isfile(localfile):
         ver = update.getFileVer(localfile)
         if ver and ver != updates[updfile]['versionid']:
-            print localfile, 'ver mismath'
-            print updates[updfile]['versionid'], ver
-            functions.downloadToFile(url, localfile, key[0], key[1])
+            needdownload = True
         elif int(updates[updfile]['size']) != os.path.getsize(localfile):
-            print localfile, 'size mismath'
-            print updates[updfile]['size'], os.path.getsize(localfile)
-            functions.downloadToFile(url, localfile, key[0], key[1])
+            needdownload = True
     else:
+        needdownload = True
+    if needdownload:
         functions.downloadToFile(url, localfile, key[0], key[1])
-        print localfile, 'downloaded'
+        log.warning('File %s downloaded', localfile)
 
 os.unlink(dbpath + 'update_new.ver')
 
+log.info('Saving VER file.')
 verfile = open(dbpath + 'update.ver', 'wt') 
 for updfile in updates.keys():
     if updfile == 'HOSTS':
@@ -77,3 +88,4 @@ for updfile in updates.keys():
             val = updates[updfile][param]
         verfile.write('%s=%s\r\n' % (param, val))
 verfile.close()
+log.warning('Finished.')
