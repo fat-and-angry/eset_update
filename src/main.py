@@ -7,13 +7,15 @@ import os
 import random
 import logging
 
+dbpath = '../db/'
+dbprefix = 'updates'
+logfile = '../esetupd.log'
+
 logging.basicConfig(
-    filename = 'esetupd.log',
+    filename = logfile,
     format = "%(asctime)s [%(levelname)s]: %(message)s",
     level = logging.INFO)
 
-dbpath = '../db/'
-dbprefix = 'updates'
 
 log = logging.getLogger()
 
