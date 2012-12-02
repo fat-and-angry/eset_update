@@ -16,7 +16,7 @@ def findKeys():
     
     # Bug in HTMLParser on server
     #===========================================================================
-    # page = functions.remove_tags(page)
+    page = functions.remove_tags(page)
     #===========================================================================
 
     keys = {}
