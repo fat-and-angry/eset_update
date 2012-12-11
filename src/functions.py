@@ -1,7 +1,6 @@
 import rarfile
 import urllib2
 import os
-import re
 
 from HTMLParser import HTMLParser
 
@@ -51,9 +50,12 @@ def download(url, username='', password=''):
     return gbuffer
 
 def downloadToFile(url, filename, username = '', password = ''):
-    f = open(filename, 'w')
+    f = open(filename + '.tmp', 'w')
     f.write(download(url, username, password))
     f.close()
+    if os.path.isfile(filename):
+        os.unlink(filename)
+    os.rename(filename + '.tmp', filename)
 
 def mkpath(path):
     dirs = os.path.abspath(path).split('/')

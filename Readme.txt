@@ -14,7 +14,7 @@ There are no special methods to installation this program. Just copy content of 
 
 
 Depends:
-This softvare requires some other programs.
+This software requires some other programs.
 
 	rarfile - pyton module for manipulating RAR archives
 		# yum install python-pip
@@ -26,6 +26,7 @@ This softvare requires some other programs.
 
 Usage:
 Run src/main.py script
+	# python ./src/main.py
 
 
 Configuration:
