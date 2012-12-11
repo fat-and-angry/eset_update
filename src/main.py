@@ -14,7 +14,7 @@ logfile = '../esetupd.log'
 logging.basicConfig(
     filename = logfile,
     format = "%(asctime)s [%(levelname)s]: %(message)s",
-    level = logging.INFO)
+    level = logging.DEBUG)
 
 
 log = logging.getLogger()
@@ -63,7 +63,7 @@ for updfile in updates.keys():
     url = host + updates[updfile]['file']
     if os.path.isfile(localfile):
         ver = update.getFileVer(localfile)
-        if ver and int(ver) > int(updates[updfile]['versionid']):
+        if ver and ver != updates[updfile]['versionid']:
             needdownload = True
         elif int(updates[updfile]['size']) != os.path.getsize(localfile):
             needdownload = True
