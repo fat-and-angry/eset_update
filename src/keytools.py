@@ -51,13 +51,13 @@ def checkKey(username, password):
             raise EnvironmentError('Undefined problem! Error %i' % e.code)
 
 def saveKey(username, password):
-    f = open('keys', 'wt')
+    f = open('/tmp/eset.keys', 'wt')
     f.write('%s %s' % (username, password))
     f.close()
 
 def loadKey():
     try:
-        f = open('keys', 'rt')
+        f = open('/tmp/eset.keys', 'rt')
         s = f.readline()
     except IOError:
         s = ''

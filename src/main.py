@@ -7,9 +7,9 @@ import os
 import random
 import logging
 
-dbpath = '../db/'
+dbpath = '/tmp/db/'
 dbprefix = 'updates'
-logfile = '../esetupd.log'
+logfile = '/tmp/esetupd.log'
 
 logging.basicConfig(
     filename = logfile,
